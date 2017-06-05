@@ -11,6 +11,7 @@ public class SegmentControllModule {
 	@Provides
 	@Singleton
 	public SegmentController provideSegmentController(){
+		System.out.println("test");
 		return new SegmentController();
 	}
 }
