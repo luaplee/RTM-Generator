@@ -4,7 +4,6 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javax.inject.Inject;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -12,7 +11,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import com.paul.Main;
-import com.paul.service.segment.SegmentCodeService;
 import com.paul.util.RtmUtil;
 
 import javafx.event.ActionEvent;
@@ -29,9 +27,6 @@ public class SegmentController extends BorderPane implements Initializable {
 	
 	private Main mainApp;
 	
-//	@Resource(name = "SegmentCodeServiceImpl")
-//	@Inject private SegmentCodeService segmentCodeService;
-	
 	@FXML
 	TextField xmlLocation;
 	
@@ -46,7 +41,6 @@ public class SegmentController extends BorderPane implements Initializable {
 	
 	@FXML
 	private void selectXmlLocationOnAction(ActionEvent event) {
-//		System.out.println(segmentCodeService.testing());
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select XML file");
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XML", "*.xml"));

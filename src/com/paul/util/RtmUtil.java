@@ -203,42 +203,6 @@ public class RtmUtil {
 		return value;
 	}
 	
-	private static String getSegmentCode(String description, String tst) throws NumberFormatException{
-		System.out.println("TEST");
-		String value = "";
-		try{
-			Integer conditionNumber;
-			if(description != null && description.lastIndexOf(DESCRIPTION_CODE_DELIMITER) != -1
-					&& (description.indexOf(RULE_SEGMENT_CODE) != -1 || 
-					description.indexOf(CONDITION_SET_SEGMENT_CODE) != -1 || 
-					description.indexOf(KEY_CONDITION_SEGMENT_CODE) != -1)){
-				return (description.substring(description.lastIndexOf(DESCRIPTION_CODE_DELIMITER) + 1, description.length())).trim();
-			} else if(description.indexOf(RULE_SEGMENT_CODE) != -1){
-				System.out.println(description.substring(description.indexOf(RULE_SEGMENT_CODE) + RULE_SEGMENT_CODE.length(), description.length()));
-				 conditionNumber = Integer.valueOf(description.substring(description.indexOf(RULE_SEGMENT_CODE) + RULE_SEGMENT_CODE.length(), description.length()));
-				 if(conditionNumber != null)
-					 value = (description.substring(description.lastIndexOf(RULE_SEGMENT_CODE) - 4, description.length())).trim(); 
-					 
-			}else if(description.indexOf(CONDITION_SET_SEGMENT_CODE) != -1){
-				System.out.println(description.substring(description.indexOf(CONDITION_SET_SEGMENT_CODE) + CONDITION_SET_SEGMENT_CODE.length(), description.length()));
-				 conditionNumber = Integer.valueOf(description.substring(description.indexOf(CONDITION_SET_SEGMENT_CODE) + CONDITION_SET_SEGMENT_CODE.length(), description.length()));
-				if(conditionNumber != null)
-						value = (description.substring(description.lastIndexOf(CONDITION_SET_SEGMENT_CODE) , description.length())).trim();
-			}else if(description.indexOf(KEY_CONDITION_SEGMENT_CODE) != -1){
-				System.out.println(description.substring(description.indexOf(KEY_CONDITION_SEGMENT_CODE) + KEY_CONDITION_SEGMENT_CODE.length(), description.length()));
-				 conditionNumber = Integer.valueOf(description.substring(description.indexOf(KEY_CONDITION_SEGMENT_CODE) + KEY_CONDITION_SEGMENT_CODE.length(), description.length()));
-					if(conditionNumber != null)
-						value = (description.substring(description.lastIndexOf(KEY_CONDITION_SEGMENT_CODE) , description.length())).trim();
-			}
-		} catch(NumberFormatException e){
-			e.printStackTrace();
-			return value;
-		}
-				System.out.println("TEH VALUE: " + value);
-				System.out.println("END");
-		return value;
-	}
-	
 	private static String getValidSegmentCode(String description, String prefix, String validationString){
 		String segmentCode = getSegmentCode(description);
 		if(isSegmentCodeValid(segmentCode, validationString)){

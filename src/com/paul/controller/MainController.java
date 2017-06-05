@@ -6,8 +6,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.inject.Inject;
-
 import com.paul.Main;
 import com.paul.controls.TableCellCheckComboBox;
 import com.paul.model.CalcGroup;
@@ -42,13 +40,7 @@ public class MainController extends BorderPane implements Initializable {
 	
 	private Main mainApp;
 	private CalcGroup calcGroup = new CalcGroup();
-	
-//	@Resource(name = "MainServiceImpl")
-//    MainService mainService;
-//	
-//	@Inject
-//	SegmentController segmentController;
-//	
+
 	@FXML
 	private TextField xmlLocation;
 	@FXML

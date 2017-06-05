@@ -1,7 +1,6 @@
 package com.paul;
 	
 import com.paul.controller.MainController;
-import com.paul.controller.SegmentControllModule;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
