@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane prefHeight="121.0" prefWidth="518.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <AnchorPane prefHeight="247.0" prefWidth="544.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="14.0" layoutY="14.0" text="XML location:" />
+            <TextField layoutX="92.0" layoutY="10.0" prefHeight="25.0" prefWidth="360.0" fx:id="xmlLocation" />
+            <Text layoutX="14.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New XML location:" />
+            <TextField fx:id="newXmlLocation" layoutX="123.0" layoutY="50.0" prefHeight="25.0" prefWidth="328.0" />
+            <Button fx:id="generateXmlButton" layoutX="14.0" layoutY="87.0" mnemonicParsing="false" onAction="#generateXmlWithSegmentCodeOnAction" prefHeight="26.0" prefWidth="109.0" text="Generate" />
+            <Button fx:id="selectXmlLocation" layoutX="459.0" layoutY="10.0" mnemonicParsing="false" onAction="#selectXmlLocationOnAction" prefHeight="25.0" prefWidth="48.0" text="Select" />
+            <Button fx:id="selectNewXmlLocation" layoutX="458.0" layoutY="48.0" mnemonicParsing="false" onAction="#selectNewXmlLocationOnAction" prefHeight="25.0" prefWidth="49.0" text="Select" />
+         </children></AnchorPane>
+   </center>
+</BorderPane>

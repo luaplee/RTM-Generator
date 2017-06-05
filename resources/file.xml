@@ -1,0 +1,81 @@
+<calcgroup autoRecalc="11" calcPeriod="13" description="042-RMT-SOCAL-BREA" name="042-RMT-SOCAL-BREA">
+    <rule class="com.sfw.app.ta.rules.SFWAssignTeam" description="Insert Facility, Team from clock - DOT.RL1" executionPoint="-700" isActive="true" name="Safeway Auto Populate" overriddenConditionSetExecIsME="true" overrideConditionSetExecIsME="false">
+        <conditionset description="Always True">
+            <parameter>
+                <name>Time Code List</name>
+                <value></value>
+            </parameter>
+            <parameter>
+                <name>Time Code List Inclusive?</name>
+                <value>false</value>
+            </parameter>
+            <parameter>
+                <name>Hour Type List</name>
+                <value></value>
+            </parameter>
+            <parameter>
+                <name>Hour Type List Inclusive?</name>
+                <value>false</value>
+            </parameter>
+            <condition class="com.workbrain.app.ta.conditions.AlwaysTrueCondition" description="Always True Condition" name="Always True Condition" negate="N"/>
+        </conditionset>
+                <conditionset description="ACHICHE">
+            <parameter>
+                <name>Time Code List</name>
+                <value></value>
+            </parameter>
+            <parameter>
+                <name>Time Code List Inclusive?</name>
+                <value>false</value>
+            </parameter>
+            <parameter>
+                <name>Hour Type List</name>
+                <value></value>
+            </parameter>
+            <parameter>
+                <name>Hour Type List Inclusive?</name>
+                <value>false</value>
+            </parameter>
+            <condition class="com.workbrain.app.ta.conditions.AlwaysTrueCondition" description="Always True Condition" name="Always True Condition" negate="N"/>
+        </conditionset>
+    </rule>
+    <rule class="com.sfw.app.ta.rules.SFWConvertRXNotHomeFacilityRule" description="TEST - DOT.RL2" executionPoint="-700" isActive="true" name="Safeway Transfer Labour Metric for Not Worked in Home Facility Rule" overriddenConditionSetExecIsME="true" overrideConditionSetExecIsME="false">
+        <conditionset description="Floating Pharmacist EE's">
+            <parameter>
+                <name>Direct Timecode List</name>
+                <value>COURT,DISASTER,DIV,LIGHT,MAINT,PROJ,RX-E,RX-I,WRK,GUAR</value>
+            </parameter>
+            <parameter>
+                <name>Labor Department</name>
+                <value>913</value>
+            </parameter>
+            <parameter>
+                <name>Labor Account Code</name>
+                <value>I12</value>
+            </parameter>
+            <parameter>
+                <name>New Department</name>
+                <value>304</value>
+            </parameter>
+            <parameter>
+                <name>New Account Code</name>
+                <value>200</value>
+            </parameter>
+            <condition class="com.workbrain.app.ta.conditions.IsEmpPropertyGeneric" name="Is Employee Property Generic Condition" negate="N">
+                <parameter>
+                    <name>ExpressionString</name>
+                    <value>&#x22;empVal16=6609A&#x22;</value>
+                </parameter>
+            </condition>
+        </conditionset>
+    </rule>
+    <rule class="com.sfw.app.ta.rules.SFWTcFromLmRule2" description="Change TCode based on Clock Swipe - SHG.RL1" executionPoint="-700" isActive="true" name="Safeway Time Code from Labor Metric Rule 2" overriddenConditionSetExecIsME="true" overrideConditionSetExecIsME="false">
+        <conditionset description="TEST ">
+            <parameter>
+                <name>EventType</name>
+                <value>After Clocks</value>
+            </parameter>
+            <condition class="com.workbrain.app.ta.conditions.AlwaysTrueCondition" description="Always True Condition" name="Always True Condition" negate="N"/>
+        </conditionset>
+    </rule>
+</calcgroup>
