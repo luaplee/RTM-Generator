@@ -30,7 +30,14 @@ public class MainServiceImpl extends BaseService implements MainService {
 					String keyConditionSegmentCode = getValidSegmentCode(conditionDescription, SEGMENT_CODE_PREFIX, KEY_CONDITION_SEGMENT_CODE);
 					String conditionName = condition.getName() + " - " + getValidSegmentCode(conditionDescription, "", KEY_CONDITION_SEGMENT_CODE);;
 					
-					List<String> keyParameterList = getConditionParameterList(condition);
+					List<String> keyParameterList = new ArrayList<>();
+					if(condition.getParameter() != null){
+						for(Parameter parameter : condition.getParameter()){
+							if(parameter != null && !parameter.getValue().isEmpty() && !parameter.getName().isEmpty()){
+								keyParameterList.add(parameter.getName() + " - " + parameter.getValue());
+							}
+						}
+					}
 					
 					//TODO: create a validator to validate the sequence of segment code
 					StringBuilder buildId = new StringBuilder();
@@ -45,12 +52,13 @@ public class MainServiceImpl extends BaseService implements MainService {
 				}
 			}
 		}
+		
 		return rtmResultList;
 	}
 	
 	@Override
 	public List<Rule> getEligibleRules(CalcGroup calcGroup, String segmentCode){
-		return getEligibleRules(calcGroup, segmentCode);
+		return super.getEligibleRules(calcGroup, segmentCode);
 	}
 	
 	private static List<String> getConditionParameterList(Condition condition){

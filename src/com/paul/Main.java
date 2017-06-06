@@ -1,6 +1,9 @@
 package com.paul;
 	
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.paul.controller.MainController;
+import com.paul.module.BasicModule;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -35,7 +38,10 @@ public class Main extends Application {
 			
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("/com/paul/view/RmtOverview.fxml"));
-			MainController mainController = new MainController();
+			
+			Injector injector = Guice.createInjector(new BasicModule());
+			MainController mainController = injector.getInstance(MainController.class);
+			
 			mainController.setMain(this);
 			loader.setController(mainController);
 			rootHome = (BorderPane) loader.load();

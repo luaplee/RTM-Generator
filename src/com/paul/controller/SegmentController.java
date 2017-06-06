@@ -10,8 +10,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import com.google.inject.Inject;
 import com.paul.Main;
-import com.paul.util.RtmUtil;
+//import com.paul.util.RtmUtil;
+import com.paul.service.segment.SegmentCodeService;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,6 +28,9 @@ import javafx.stage.Stage;
 public class SegmentController extends BorderPane implements Initializable {
 	
 	private Main mainApp;
+	
+	@Inject
+	SegmentCodeService segmentCodeService;
 	
 	@FXML
 	TextField xmlLocation;
@@ -65,7 +70,7 @@ public class SegmentController extends BorderPane implements Initializable {
 		try {
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
-			DOMSource source = new DOMSource(RtmUtil.appendConditionSegmentCodes(xmlFile));
+			DOMSource source = new DOMSource(segmentCodeService.appendConditionSegmentCodes(xmlFile));
 			File resultFile = new File(newDirectory.getPath() + File.separator + "segment_code_" + xmlFile.getName());
 			StreamResult result = new StreamResult(resultFile);
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");

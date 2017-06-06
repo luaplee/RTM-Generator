@@ -7,20 +7,28 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.paul.model.CalcGroup;
 import com.paul.model.Rule;
 import com.paul.util.StringUtil;
 
 public class BaseService {
-	
-	//TODO: remove static hardcodes and incorporate in a property file
-	protected static final String RULE_SEGMENT_CODE = "RL";
-	protected static final String CONDITION_SET_SEGMENT_CODE = "CS";
-	protected static final String KEY_CONDITION_SEGMENT_CODE = "CN";
-	protected static final String CODE_ERROR_STIRNG = "CODE ERROR";
-	protected static final String DESCRIPTION_CODE_DELIMITER = "-";
-	protected static final String SEGMENT_CODE_PREFIX = ".";
-	protected static final String DESCRIPTION_ATTRIBUTE = "description";
+
+	@Inject @Named("build-code.rule")
+	protected String RULE_SEGMENT_CODE;
+	@Inject @Named("build-code.condition.set")
+	protected String CONDITION_SET_SEGMENT_CODE;
+	@Inject @Named("build-code.condition")
+	protected String KEY_CONDITION_SEGMENT_CODE = "CN";
+	@Inject @Named("build-code.error")
+	protected String CODE_ERROR_STIRNG = "CODE ERROR";
+	@Inject @Named("build-code.delimeter")
+	protected String DESCRIPTION_CODE_DELIMITER = "-";
+	@Inject @Named("build-code.prefix")
+	protected String SEGMENT_CODE_PREFIX = ".";
+	@Inject @Named("build-code.attribute.tag")
+	protected String DESCRIPTION_ATTRIBUTE = "description";
 	
 	public List<Rule> getEligibleRules(CalcGroup calcGroup, String segmentCode){
 		List<Rule> eligibleRules = new ArrayList<Rule>();
@@ -35,7 +43,7 @@ public class BaseService {
 		return eligibleRules;
 	}
 	
-	public List<Node> getEligibleRules(NodeList rules, String segmentCode){
+	protected List<Node> getEligibleRules(NodeList rules, String segmentCode){
 		List<Node> eligibleRules = new ArrayList<Node>();
 		for(int i = 0; i < rules.getLength(); i++){
 			Node rule = rules.item(i);
@@ -50,9 +58,8 @@ public class BaseService {
 		return eligibleRules;
 	}
 	
-	private boolean isRuleEligible(String ruleDescription, String segmentCode){
-		if(ruleDescription.lastIndexOf(DESCRIPTION_CODE_DELIMITER) != -1 
-				&& getValidSegmentCode(ruleDescription, "", RULE_SEGMENT_CODE).contains(segmentCode)
+	protected boolean isRuleEligible(String ruleDescription, String segmentCode){
+		if(getValidSegmentCode(ruleDescription, "", RULE_SEGMENT_CODE).contains(segmentCode)
 				&& !getValidSegmentCode(ruleDescription, "", RULE_SEGMENT_CODE).contains(CODE_ERROR_STIRNG)){
 			return true;
 		}
@@ -67,14 +74,32 @@ public class BaseService {
 		return prefix + CODE_ERROR_STIRNG;
 	}
 	
-	private String getSegmentCode(String description){
-		if(description != null && description.lastIndexOf(DESCRIPTION_CODE_DELIMITER) != -1){
+	protected String getSegmentCode(String description) throws NumberFormatException{
+		String value = "";
+		Integer conditionNumber;
+		if(description != null && description.lastIndexOf(DESCRIPTION_CODE_DELIMITER) != -1
+				&& (description.indexOf(RULE_SEGMENT_CODE) != -1 || 
+				description.indexOf(CONDITION_SET_SEGMENT_CODE) != -1 || 
+				description.indexOf(KEY_CONDITION_SEGMENT_CODE) != -1)){
 			return (description.substring(description.lastIndexOf(DESCRIPTION_CODE_DELIMITER) + 1, description.length())).trim();
+		} else if(description.indexOf(RULE_SEGMENT_CODE) != -1){
+			 conditionNumber = Integer.valueOf(description.substring(description.indexOf(RULE_SEGMENT_CODE) + RULE_SEGMENT_CODE.length(), description.length()));
+			 if(conditionNumber != null)
+				 value = (description.substring(description.lastIndexOf(RULE_SEGMENT_CODE) - 4, description.length())).trim(); 
+				 
+		}else if(description.indexOf(CONDITION_SET_SEGMENT_CODE) != -1){
+			 conditionNumber = Integer.valueOf(description.substring(description.indexOf(CONDITION_SET_SEGMENT_CODE) + CONDITION_SET_SEGMENT_CODE.length(), description.length()));
+			if(conditionNumber != null)
+					value = (description.substring(description.lastIndexOf(CONDITION_SET_SEGMENT_CODE) , description.length())).trim();
+		}else if(description.indexOf(KEY_CONDITION_SEGMENT_CODE) != -1){
+			 conditionNumber = Integer.valueOf(description.substring(description.indexOf(KEY_CONDITION_SEGMENT_CODE) + KEY_CONDITION_SEGMENT_CODE.length(), description.length()));
+				if(conditionNumber != null)
+					value = (description.substring(description.lastIndexOf(KEY_CONDITION_SEGMENT_CODE) , description.length())).trim();
 		}
-		return "";
+		return value;
 	}
 	
-	private boolean isSegmentCodeValid(String segmentCode, String validationString){
+	protected boolean isSegmentCodeValid(String segmentCode, String validationString){
 		int prefixIndex = segmentCode.indexOf(SEGMENT_CODE_PREFIX);
 		int indexStart = prefixIndex > -1 ? prefixIndex + 1 : 0;
 		if(segmentCode != null && !segmentCode.isEmpty()){

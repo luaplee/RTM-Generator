@@ -11,5 +11,5 @@ public interface MainService {
 	public List<RtmResult> getRtmResult(List<Rule> eligibleRules);
 	
 	public List<Rule> getEligibleRules(CalcGroup calcGroup, String segmentCode);
-
+	
 }

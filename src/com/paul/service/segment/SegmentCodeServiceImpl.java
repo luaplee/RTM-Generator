@@ -15,10 +15,6 @@ import com.paul.service.BaseService;
 
 public class SegmentCodeServiceImpl extends BaseService implements SegmentCodeService{
 	
-	public String testing(){
-		return "hehe";
-	}
-	
 	//TODO: 2nd varargs parameters can only handle up to 2, fix this in the future
 	private void appendSegmentCode(NodeList nodeList, String... xmlTag){
 		int segmentCodeCounter = 1;
@@ -79,7 +75,7 @@ public class SegmentCodeServiceImpl extends BaseService implements SegmentCodeSe
 		return null;
 	}
 	
-	private static String getSegmentCodeOfXmlTag(String xmlTag){
+	private String getSegmentCodeOfXmlTag(String xmlTag){
 		switch(xmlTag){
 		case "rule":
 			return RULE_SEGMENT_CODE;

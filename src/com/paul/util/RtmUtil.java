@@ -208,14 +208,12 @@ public class RtmUtil {
 		if(isSegmentCodeValid(segmentCode, validationString)){
 			return prefix + segmentCode;
 		}
-		System.out.println("invalid: " + segmentCode);
 		return prefix + CODE_ERROR_STIRNG;
 	}
 	
 	private static boolean isSegmentCodeValid(String segmentCode, String validationString){
 		int prefixIndex = segmentCode.indexOf(SEGMENT_CODE_PREFIX);
 		int indexStart = prefixIndex > -1 ? prefixIndex + 1 : 0;
-		System.out.println(segmentCode);
 		if(segmentCode != null && !segmentCode.isEmpty()){
 			String segmentCodeWithoutNumber = (segmentCode.substring(indexStart, validationString.length() + indexStart)).trim();
 			String segmentNumber = segmentCode.substring(validationString.length() + indexStart, segmentCode.length()).trim();
@@ -236,17 +234,4 @@ public class RtmUtil {
 		return false;
 	}
 	
-//	public static void main(String[] args) {
-//		CalcGroup calcGroup = new CalcGroup();
-//		ClassLoader classLoader = calcGroup.getClass().getClassLoader();
-//		
-//		try {
-//			System.out.println(classLoader.getResource("file.xml"));
-//			File file = new File(classLoader.getResource("file.xml").getFile());
-//			RtmUtil.appendConditionSegmentCodes(file);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-
 }

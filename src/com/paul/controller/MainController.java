@@ -6,12 +6,13 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.google.inject.Inject;
 import com.paul.Main;
 import com.paul.controls.TableCellCheckComboBox;
 import com.paul.model.CalcGroup;
 import com.paul.model.RtmResult;
 import com.paul.model.Rule;
-import com.paul.util.RtmUtil;
+import com.paul.service.MainService;
 import com.paul.util.TableUtil;
 import com.paul.util.XmlToPojo;
 
@@ -40,6 +41,12 @@ public class MainController extends BorderPane implements Initializable {
 	
 	private Main mainApp;
 	private CalcGroup calcGroup = new CalcGroup();
+	
+	@Inject
+	SegmentController segmentController;
+	
+	@Inject
+	MainService mainService;
 
 	@FXML
 	private TextField xmlLocation;
@@ -67,8 +74,8 @@ public class MainController extends BorderPane implements Initializable {
 	
 	@FXML
 	private void generateButtonOnAction(ActionEvent event) {
-		List<Rule> eligibleRules = RtmUtil.getEligibleRules(calcGroup, segmentCode.getText());
-		ObservableList<RtmResult> rtmResult = FXCollections.observableArrayList(RtmUtil.getRtmResult(eligibleRules));
+		List<Rule> eligibleRules = mainService.getEligibleRules(calcGroup, segmentCode.getText());
+		ObservableList<RtmResult> rtmResult = FXCollections.observableArrayList(mainService.getRtmResult(eligibleRules));
 		
 		rtmTable.setEditable(true);
 		keyParameters.setEditable(true);
@@ -82,7 +89,6 @@ public class MainController extends BorderPane implements Initializable {
 			    new EventHandler<CellEditEvent<RtmResult, String>>() {
 			        @Override
 			        public void handle(CellEditEvent<RtmResult, String> t) {
-			            System.out.println("test");
 			        }
 			    });
 		conditionSet.setCellValueFactory(cellData -> cellData.getValue().getConditionSetProperty());
@@ -93,9 +99,6 @@ public class MainController extends BorderPane implements Initializable {
 	
 	@FXML
 	private void loadButtonOnAction(ActionEvent event) {
-		System.out.println("Load btn event");
-		System.out.println(xmlLocation);
-		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select XML file");
 		fileChooser.getExtensionFilters().addAll(
@@ -112,12 +115,10 @@ public class MainController extends BorderPane implements Initializable {
 	private void openSegmentWindow(ActionEvent event) {
 		Stage stage;
 		Parent root;
-		System.out.println("start");
 		stage = new Stage();
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("/com/paul/view/SegmentWindow.fxml"));
-			SegmentController segmentController = new SegmentController();
 			segmentController.setMain(mainApp);
 			loader.setController(segmentController);
 			root = (BorderPane) loader.load();

@@ -31,15 +31,11 @@ public class CalcGroup extends BaseModel {
 		ClassLoader classLoader = calcGroup.getClass().getClassLoader();
 		
 		try {
-			System.out.println(classLoader.getResource("file.xml"));
 			File file = new File(classLoader.getResource("file.xml").getFile());
 			JAXBContext jaxbContent = JAXBContext.newInstance(CalcGroup.class);
 			
 			Unmarshaller unmarshaller = jaxbContent.createUnmarshaller();
 			calcGroup = (CalcGroup) unmarshaller.unmarshal(file);
-			
-			System.out.println(calcGroup);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
