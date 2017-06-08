@@ -8,20 +8,24 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="469.0" prefWidth="1171.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="507.0" prefWidth="1171.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <AnchorPane>
+      <AnchorPane prefHeight="468.0" prefWidth="1171.0">
          <children>
-            <HBox layoutX="17.0" layoutY="13.0" prefHeight="35.0" prefWidth="518.0" spacing="15.0">
+            <HBox layoutX="17.0" layoutY="13.0" spacing="15.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="XML:" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="XML:">
+                     <HBox.margin>
+                        <Insets top="4.0" />
+                     </HBox.margin></Text>
                   <TextField prefHeight="25.0" prefWidth="394.0" fx:id="xmlLocation" />
-                  <Button fx:id="loadButton" mnemonicParsing="false" onAction="#loadButtonOnAction" text="Load" />
+                  <Button fx:id="loadButton" mnemonicParsing="false" onAction="#loadButtonOnAction" text="Load XML" />
                </children>
                <opaqueInsets>
                   <Insets />
@@ -32,15 +36,24 @@
             </HBox>
             <HBox layoutX="17.0" layoutY="51.0" spacing="15.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Segment Code:" />
-                  <TextField fx:id="segmentCode" />
-                  <Button fx:id="generateButton" mnemonicParsing="false" onAction="#generateButtonOnAction" text="Generate" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Segment Code Filter:" wrappingWidth="110.349609375">
+                     <HBox.margin>
+                        <Insets top="4.0" />
+                     </HBox.margin>
+                  </Text>
+                  <TextField fx:id="segmentCode" prefHeight="25.0" prefWidth="166.0">
+                     <tooltip>
+                        <Tooltip text="e.g. DOT,5TH,CAM Comma separated" textOverrun="CLIP" />
+                     </tooltip>
+                  </TextField>
+                  <Button fx:id="generateButton" mnemonicParsing="false" onAction="#generateButtonOnAction" text="Generate Table" />
+                  <Button fx:id="exportExcelButton" mnemonicParsing="false" onAction="#exportExcelButtonOnAction" text="Export Excel File" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </HBox>
-            <TableView fx:id="rtmTable" editable="true" layoutX="17.0" layoutY="89.0" prefHeight="368.0" prefWidth="1142.0" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="17.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="89.0">
+            <TableView fx:id="rtmTable" editable="true" layoutX="17.0" layoutY="89.0" prefHeight="389.0" prefWidth="1142.0" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="91.0">
               <columns>
                 <TableColumn fx:id="ruleName" minWidth="-1.0" prefWidth="288.92803955078125" sortable="false" text="Rule Name" />
                 <TableColumn fx:id="conditionSet" editable="false" prefWidth="255.1878662109375" sortable="false" text="Condition Set" />

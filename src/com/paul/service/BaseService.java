@@ -1,5 +1,6 @@
 package com.paul.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,9 @@ import com.google.inject.name.Named;
 import com.paul.model.CalcGroup;
 import com.paul.model.Rule;
 import com.paul.util.StringUtil;
+
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 
 public class BaseService {
 
@@ -41,6 +45,12 @@ public class BaseService {
 			}
 		}
 		return eligibleRules;
+	}
+	
+	public File getNewFileLocation(Stage ownerStage, String dialogTitle){
+		DirectoryChooser directoryChooser = new DirectoryChooser();
+		directoryChooser.setTitle(dialogTitle);
+		return directoryChooser.showDialog(ownerStage);
 	}
 	
 	protected List<Node> getEligibleRules(NodeList rules, String segmentCode){
@@ -113,5 +123,7 @@ public class BaseService {
 		}
 		return false;
 	}
+	
+	
 
 }

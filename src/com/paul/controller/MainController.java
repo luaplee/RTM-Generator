@@ -3,6 +3,7 @@ package com.paul.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -33,6 +34,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -41,6 +43,7 @@ public class MainController extends BorderPane implements Initializable {
 	
 	private Main mainApp;
 	private CalcGroup calcGroup = new CalcGroup();
+	private List<Rule> rtmTableContents = new ArrayList<>();
 	
 	@Inject
 	SegmentController segmentController;
@@ -57,6 +60,8 @@ public class MainController extends BorderPane implements Initializable {
 	private Button loadButton;
 	@FXML
 	private Button generateButton;
+	@FXML
+	private Button exportExcelButton;
 	
 	@FXML
 	private TableView<RtmResult> rtmTable;
@@ -74,36 +79,49 @@ public class MainController extends BorderPane implements Initializable {
 	
 	@FXML
 	private void generateButtonOnAction(ActionEvent event) {
-		List<Rule> eligibleRules = mainService.getEligibleRules(calcGroup, segmentCode.getText());
-		ObservableList<RtmResult> rtmResult = FXCollections.observableArrayList(mainService.getRtmResult(eligibleRules));
-		
-		rtmTable.setEditable(true);
-		keyParameters.setEditable(true);
-		keyParameters.setCellValueFactory(cellData -> cellData.getValue().getKeyParametersProperty());
-		keyParameters.setCellFactory(TableCellCheckComboBox.forTableColumn());
-		
-		ruleName.setEditable(true);
-		ruleName.setCellValueFactory(cellData -> cellData.getValue().getRuleNameProperty());
-		ruleName.setCellFactory(TextFieldTableCell.forTableColumn());
-		ruleName.setOnEditCommit(
-			    new EventHandler<CellEditEvent<RtmResult, String>>() {
-			        @Override
-			        public void handle(CellEditEvent<RtmResult, String> t) {
-			        }
-			    });
-		conditionSet.setCellValueFactory(cellData -> cellData.getValue().getConditionSetProperty());
-		keyCondition.setCellValueFactory(cellData -> cellData.getValue().getKeyConditionProperty());
-		buildId.setCellValueFactory(cellData -> cellData.getValue().getBuildIdProperty());
-		rtmTable.setItems(rtmResult);
+		if(!calcGroup.isEmpty()){
+			rtmTableContents = mainService.getEligibleRules(calcGroup, segmentCode.getText());
+			ObservableList<RtmResult> rtmResult = FXCollections.observableArrayList(
+													mainService.getRtmResult(rtmTableContents));
+			rtmTable.setEditable(true);
+			keyParameters.setEditable(true);
+			keyParameters.setCellValueFactory(cellData -> cellData.getValue().getKeyParametersProperty());
+			keyParameters.setCellFactory(TableCellCheckComboBox.forTableColumn());
+			
+			ruleName.setEditable(true);
+			ruleName.setCellValueFactory(cellData -> cellData.getValue().getRuleNameProperty());
+			ruleName.setCellFactory(TextFieldTableCell.forTableColumn());
+			ruleName.setOnEditCommit(
+					new EventHandler<CellEditEvent<RtmResult, String>>() {
+						@Override
+						public void handle(CellEditEvent<RtmResult, String> t) {
+						}
+					});
+			conditionSet.setCellValueFactory(cellData -> cellData.getValue().getConditionSetProperty());
+			keyCondition.setCellValueFactory(cellData -> cellData.getValue().getKeyConditionProperty());
+			buildId.setCellValueFactory(cellData -> cellData.getValue().getBuildIdProperty());
+			rtmTable.setItems(rtmResult);
+		}
+	}
+	
+	@FXML
+	private void exportExcelButtonOnAction(ActionEvent event) {
+//		if(!rtmTableContents.isEmpty()){
+			//TODO: remove try catch and find elegant way of throwing exception to front end, also add logger
+			try{
+				File fileLocation = mainService.getNewFileLocation(mainApp.getPrimaryStage(), "Excel File Location");
+				mainService.exportExcelFile(rtmTableContents, fileLocation);
+			} catch(Exception e){
+				e.printStackTrace();
+			}
+//		}
 	}
 	
 	@FXML
 	private void loadButtonOnAction(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select XML file");
-		fileChooser.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("XML", "*.xml")
-				);
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XML", "*.xml"));
 		File xmlFile = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
 		if(xmlFile != null){
 			xmlLocation.setText(xmlFile.getPath());
@@ -118,7 +136,7 @@ public class MainController extends BorderPane implements Initializable {
 		stage = new Stage();
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/com/paul/view/SegmentWindow.fxml"));
+			loader.setLocation(this.getClass().getClassLoader().getResource("com/paul/view/SegmentWindow.fxml"));
 			segmentController.setMain(mainApp);
 			loader.setController(segmentController);
 			root = (BorderPane) loader.load();
@@ -128,7 +146,7 @@ public class MainController extends BorderPane implements Initializable {
 			stage.initOwner(loadButton.getScene().getWindow());
 			stage.showAndWait();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO use logger
 			e.printStackTrace();
 		}
 
@@ -140,7 +158,6 @@ public class MainController extends BorderPane implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
 		rtmTable.getSelectionModel().setCellSelectionEnabled(true);
 		rtmTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		TableUtil.installCopyPasteHandler(rtmTable);

@@ -26,6 +26,10 @@ public class CalcGroup extends BaseModel {
 		this.rule = rule;
 	}
 	
+	public boolean isEmpty(){
+		return rule.isEmpty();
+	}
+	
 	public static void main(String[] args) {
 		CalcGroup calcGroup = new CalcGroup();
 		ClassLoader classLoader = calcGroup.getClass().getClassLoader();
