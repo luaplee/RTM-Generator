@@ -11,8 +11,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.google.inject.Singleton;
 import com.paul.service.BaseService;
 
+@Singleton
 public class SegmentCodeServiceImpl extends BaseService implements SegmentCodeService{
 	
 	//TODO: 2nd varargs parameters can only handle up to 2, fix this in the future

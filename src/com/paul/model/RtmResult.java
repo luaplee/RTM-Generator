@@ -79,7 +79,6 @@ public class RtmResult {
 		this.buildId.set(buildId);
 	}
 	
-	
 	public List<String> getKeyParametersChoice() {
 		return keyParametersChoice.get();
 	}
@@ -88,6 +87,13 @@ public class RtmResult {
 	}
 	public void setKeyParametersChoice(ObservableList<String> keyParametersChoice) {
 		this.keyParametersChoice.set(keyParametersChoice);
+	}
+	
+	public String[] getArray(){
+		List<String> keyParam = keyParameters.get(); 
+		String result[] = {ruleName.get(), conditionSet.get(), keyCondition.get(),
+							keyParam.size() > 0 ? keyParam.toString() : "" , buildId.get()};
+		return result;
 	}
 	
 	@Override

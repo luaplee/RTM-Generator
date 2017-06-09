@@ -9,6 +9,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.paul.model.CalcGroup;
 import com.paul.model.Rule;
@@ -17,6 +18,7 @@ import com.paul.util.StringUtil;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
+@Singleton
 public class BaseService {
 
 	@Inject @Named("build-code.rule")

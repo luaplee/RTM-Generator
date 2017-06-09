@@ -19,6 +19,6 @@ public interface MainService {
 	
 	public File getNewFileLocation(Stage ownerStage, String dialogTitle);
 	
-	public void exportExcelFile(List<Rule> rules, File newFileLocation) throws FileNotFoundException , IOException;
+	public void exportExcelFile(List<RtmResult> rules, File newFileLocation) throws Exception;
 	
 }

@@ -9,6 +9,8 @@ import com.paul.controller.SegmentController;
 import com.paul.service.BaseService;
 import com.paul.service.MainService;
 import com.paul.service.MainServiceImpl;
+import com.paul.service.excel.ExcelService;
+import com.paul.service.excel.ExcelServiceImpl;
 import com.paul.service.segment.SegmentCodeService;
 import com.paul.service.segment.SegmentCodeServiceImpl;
 
@@ -21,6 +23,7 @@ public class BasicModule extends AbstractModule {
 		bind(BaseService.class);
 		bind(SegmentCodeService.class).to(SegmentCodeServiceImpl.class);
 		bind(MainService.class).to(MainServiceImpl.class);
+		bind(ExcelService.class).to(ExcelServiceImpl.class);
 	}
 	
 	private Properties getPropertyFile(){

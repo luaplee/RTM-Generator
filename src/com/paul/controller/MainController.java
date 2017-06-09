@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -34,7 +35,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -43,7 +43,7 @@ public class MainController extends BorderPane implements Initializable {
 	
 	private Main mainApp;
 	private CalcGroup calcGroup = new CalcGroup();
-	private List<Rule> rtmTableContents = new ArrayList<>();
+	private List<RtmResult> rtmTableContents = new ArrayList<>();
 	
 	@Inject
 	SegmentController segmentController;
@@ -80,9 +80,9 @@ public class MainController extends BorderPane implements Initializable {
 	@FXML
 	private void generateButtonOnAction(ActionEvent event) {
 		if(!calcGroup.isEmpty()){
-			rtmTableContents = mainService.getEligibleRules(calcGroup, segmentCode.getText());
-			ObservableList<RtmResult> rtmResult = FXCollections.observableArrayList(
-													mainService.getRtmResult(rtmTableContents));
+			List<Rule> eligibleRules = mainService.getEligibleRules(calcGroup, segmentCode.getText());
+			rtmTableContents = mainService.getRtmResult(eligibleRules);
+			ObservableList<RtmResult> rtmResult = FXCollections.observableArrayList(rtmTableContents);
 			rtmTable.setEditable(true);
 			keyParameters.setEditable(true);
 			keyParameters.setCellValueFactory(cellData -> cellData.getValue().getKeyParametersProperty());
@@ -106,15 +106,21 @@ public class MainController extends BorderPane implements Initializable {
 	
 	@FXML
 	private void exportExcelButtonOnAction(ActionEvent event) {
-//		if(!rtmTableContents.isEmpty()){
+		if(!rtmTableContents.isEmpty()){
 			//TODO: remove try catch and find elegant way of throwing exception to front end, also add logger
 			try{
 				File fileLocation = mainService.getNewFileLocation(mainApp.getPrimaryStage(), "Excel File Location");
-				mainService.exportExcelFile(rtmTableContents, fileLocation);
+				File excelFile = new File(fileLocation.getPath() 
+											+ File.separator 
+											+ "RTM" 
+											+ new Date().getTime() 
+											+ ".xlsx");
+				mainService.exportExcelFile(rtmTableContents, excelFile);
 			} catch(Exception e){
+				//TODO: handle access is denied
 				e.printStackTrace();
 			}
-//		}
+		}
 	}
 	
 	@FXML

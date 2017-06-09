@@ -1,27 +1,27 @@
 package com.paul.service;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.paul.model.CalcGroup;
 import com.paul.model.Condition;
 import com.paul.model.ConditionSet;
+import com.paul.model.ExcelModel;
 import com.paul.model.Parameter;
 import com.paul.model.RtmResult;
 import com.paul.model.Rule;
+import com.paul.service.excel.ExcelService;
 
 import javafx.stage.Stage;
 
+@Singleton
 public class MainServiceImpl extends BaseService implements MainService {
+	
+	@Inject
+	ExcelService excelService;
 	
 	@Override
 	public List<RtmResult> getRtmResult(List<Rule> eligibleRules){
@@ -78,36 +78,21 @@ public class MainServiceImpl extends BaseService implements MainService {
 	}
 	
 	@Override
-	public void exportExcelFile(List<Rule> rules, File newFileLocation) throws FileNotFoundException , IOException {
-		XSSFWorkbook workbook = new XSSFWorkbook();
-		XSSFSheet sheet = workbook.createSheet("RTM");
-		int rowCount = 0;
-		Row row = sheet.createRow(++rowCount);
-		writeRow(row, 
-				"Rule Name + [Rule Code]",
-				"Condition Set + [Condition Set Code]",
-				"Key Condition + [Condition Code]",
-				"Key Parameters",
-				"Build ID");
+	public void exportExcelFile(List<RtmResult> rules, File newFileLocation) throws Exception{
+		ExcelModel excelModel = new ExcelModel
+								.ExcelBuilder("RTM")
+								.header("Rule Name + [Rule Code]",
+										"Condition Set + [Condition Set Code]",
+										"Key Condition + [Condition Code]",
+										"Key Parameters",
+										"Build ID")
+								.data(rules)
+								.file(newFileLocation)
+								.build();
 		
-		try{
-			FileOutputStream outputStream = new FileOutputStream(newFileLocation);
-			workbook.write(outputStream);
-		} finally {
-			workbook.close();
-		}
-		
+		excelService.exportExcel(excelModel);
 	}
-	
-	private void writeRow(Row row, String... cellValues){
-		int cellCount = 0;
-		Cell cell = row.createCell(cellCount);
-		for(String cellValue : cellValues){
-			cell.setCellValue(cellValue);
-			cell = row.createCell(cellCount++);
-		}
-	}
-	
+
 	private static List<String> getConditionParameterList(Condition condition){
 		List<String> keyParameterList = new ArrayList<>();
 		if(condition.getParameter() != null){
