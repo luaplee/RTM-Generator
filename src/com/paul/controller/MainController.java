@@ -19,6 +19,7 @@ import com.paul.util.TableUtil;
 import com.paul.util.XmlToPojo;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,6 +29,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -78,6 +80,11 @@ public class MainController extends BorderPane implements Initializable {
 	private TableColumn<RtmResult, String> buildId;
 	
 	@FXML
+	private Label totalRowCount;
+	@FXML
+	private Label totalSelectedRowCount;
+	
+	@FXML
 	private void generateButtonOnAction(ActionEvent event) {
 		if(!calcGroup.isEmpty()){
 			List<Rule> eligibleRules = mainService.getEligibleRules(calcGroup, segmentCode.getText());
@@ -100,9 +107,12 @@ public class MainController extends BorderPane implements Initializable {
 			conditionSet.setCellValueFactory(cellData -> cellData.getValue().getConditionSetProperty());
 			keyCondition.setCellValueFactory(cellData -> cellData.getValue().getKeyConditionProperty());
 			buildId.setCellValueFactory(cellData -> cellData.getValue().getBuildIdProperty());
+			totalRowCount.setText(String.valueOf(rtmResult.size()));
+			totalSelectedRowCount.setText("0");
 			rtmTable.setItems(rtmResult);
 		}
 	}
+	
 	
 	@FXML
 	private void exportExcelButtonOnAction(ActionEvent event) {
@@ -167,6 +177,18 @@ public class MainController extends BorderPane implements Initializable {
 		rtmTable.getSelectionModel().setCellSelectionEnabled(true);
 		rtmTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		TableUtil.installCopyPasteHandler(rtmTable);
+		
+		rtmTable.getSelectionModel().getSelectedItems().addListener(new ListChangeListener<RtmResult>() {
+			@Override
+			public void onChanged(javafx.collections.ListChangeListener.Change<? extends RtmResult> c) {
+				while(c.next()){
+					String selectedRowCount = String.valueOf(rtmTable.getSelectionModel().getSelectedItems().size());
+					totalSelectedRowCount.setText(selectedRowCount);
+				}
+			}
+
+			
+		});
 	}
 
 }
